@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="swipe_tools_action_array">
+        <item>@string/swipe_flash</item>
+        <item>@string/swipe_wifi</item>
+        <item>@string/swipe_screenbrightness</item>
+        <item>@string/swipe_speeder</item>
+
+        <item>@string/swipe_screenlock</item>
+        <item>@string/swipe_camere</item>
+        <item>@string/swipe_calendar</item>
+        <item>@string/swipe_data</item>
+
+        <item>@string/swipe_calculator</item>
+        <item>@string/swipe_flightmode</item>
+        <item>@string/swipe_swipesetting</item>
+        <item>@string/swipe_bluetooth</item>
+
+        <item>@string/swipe_mute</item>
+        <item>@string/swipe_autorotation</item>
+        <item>@string/swipe_setting</item>
+        <item>@string/swipe_alarm</item>
+    </array>
+
+    <array name="swipe_tools_title_array">
+        <item>@string/swipe_flash_title</item>
+        <item>@string/swipe_wifi_title</item>
+        <item>@string/swipe_screenbrightness_title</item>
+        <item>@string/swipe_speeder_title</item>
+
+        <item>@string/swipe_screenlock_title</item>
+        <item>@string/swipe_camere_title</item>
+        <item>@string/swipe_calendar_title</item>
+        <item>@string/swipe_data_title</item>
+
+        <item>@string/swipe_calculator_title</item>
+        <item>@string/swipe_flightmode_title</item>
+        <item>@string/swipe_swipesetting_title</item>
+        <item>@string/swipe_bluetooth_title</item>
+
+        <item>@string/swipe_mute_title</item>
+        <item>@string/swipe_autorotation_title</item>
+        <item>@string/swipe_setting_title</item>
+        <item>@string/swipe_alarm_title</item>
+    </array>
+
+    <array name="swipe_for_type">
+        <item>@string/swipe_for_type0</item>
+        <item>@string/swipe_for_type1</item>
+    </array>
+
+    <array name="swipe_area_type">
+        <item>@string/swipe_area_type0</item>
+        <item>@string/swipe_area_type1</item>
+        <item>@string/swipe_area_type2</item>
+    </array>
+
+    <array name="swipe_open_type">
+        <item>@string/swipe_open_type0</item>
+        <item>@string/swipe_open_type1</item>
+    </array>
+
+</resources>
