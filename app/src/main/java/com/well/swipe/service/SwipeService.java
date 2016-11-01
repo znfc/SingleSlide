@@ -123,7 +123,7 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
 
     private Handler mHandler = new Handler();
 
-    private Tracker mTracker;
+//    private Tracker mTracker;
 
     private HomeWatchReceiver mWatchRecevier = new HomeWatchReceiver();
 
@@ -146,7 +146,7 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
         Log.i("Gmw", "SwipeService_onCreate");
         //Google
         SwipefreeApplication application = (SwipefreeApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+//        mTracker = application.getDefaultTracker();
 
         mCatchViewWidth = getResources().getDimensionPixelSize(R.dimen.catch_view_width);
         mCatchViewHeight = getResources().getDimensionPixelSize(R.dimen.catch_view_height);
@@ -241,8 +241,8 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mLauncherModel.startLoadTask();
-        mTracker.setScreenName("SwipeService::onStartCommand()");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+//        mTracker.setScreenName("SwipeService::onStartCommand()");
+//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -435,10 +435,10 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
     @Override
     public void openLeft() {
         // [START custom_event]
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("SwipeService::openLeft()")
-                .build());
+//        mTracker.send(new HitBuilders.EventBuilder()
+//                .setCategory("Action")
+//                .setAction("SwipeService::openLeft()")
+//                .build());
         // [END custom_event]
         /**
          * 0 仅桌面的时候打开
@@ -453,10 +453,10 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
     @Override
     public void openRight() {
         // [START custom_event]
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("SwipeService::openRight()")
-                .build());
+//        mTracker.send(new HitBuilders.EventBuilder()
+//                .setCategory("Action")
+//                .setAction("SwipeService::openRight()")
+//                .build());
         // [END custom_event]
         if (swipeSwipeSetting()) {
             mSwipeLayout.switchRight();
@@ -574,10 +574,10 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
             putRecentApps();
 
             // [START custom_event]
-            mTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Action")
-                    .setAction("SwipeService::onClick()::WhiteDot")
-                    .build());
+//            mTracker.send(new HitBuilders.EventBuilder()
+//                    .setCategory("Action")
+//                    .setAction("SwipeService::onClick()::WhiteDot")
+//                    .build());
             // [END custom_event]
         } else {
             Utils.swipeToast(getBaseContext(), getResources().getString(R.string.swipe_whitelist_item_unlauncher));

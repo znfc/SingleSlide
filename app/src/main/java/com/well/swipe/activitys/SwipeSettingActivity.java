@@ -85,7 +85,7 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
      */
     SwipeService mService;
 
-    private Tracker mTracker;
+//    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
 
         //Google
         SwipefreeApplication application = (SwipefreeApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+//        mTracker = application.getDefaultTracker();
 
         mSwipeToggle = (PreferenceCategory) findViewById(R.id.swipe_toggle);
 
@@ -155,8 +155,8 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
         super.onResume();
         //startService(new Intent(SwipeSettingActivity.this, SwipeService.class));
 
-        mTracker.setScreenName("SwipeSettingsActivity::onResume()");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+//        mTracker.setScreenName("SwipeSettingsActivity::onResume()");
+//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

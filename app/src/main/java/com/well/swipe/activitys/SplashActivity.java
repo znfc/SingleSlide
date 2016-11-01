@@ -34,7 +34,7 @@ public class SplashActivity extends Activity {
 
     RequestAlertDialog mAlertDialog;
 
-    private Tracker mTracker;
+//    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class SplashActivity extends Activity {
             //Process.killProcess(android.os.Process.myPid());
         }
         SwipefreeApplication application = (SwipefreeApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+//        mTracker = application.getDefaultTracker();
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
@@ -86,10 +86,10 @@ public class SplashActivity extends Activity {
                             @Override
                             public void onClick(View v) {
                                 //google anylnitic
-                                mTracker.send(new HitBuilders.EventBuilder()
-                                        .setCategory("Action")
-                                        .setAction("authorized ALERT_WINDOWS")
-                                        .build());
+//                                mTracker.send(new HitBuilders.EventBuilder()
+//                                        .setCategory("Action")
+//                                        .setAction("authorized ALERT_WINDOWS")
+//                                        .build());
                                 startPermission();
                                 mAlertDialog.dissmis();
                             }
@@ -97,10 +97,10 @@ public class SplashActivity extends Activity {
                         .onNegative(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mTracker.send(new HitBuilders.EventBuilder()
-                                        .setCategory("Action")
-                                        .setAction("denied ALERT_WINDOWS")
-                                        .build());
+//                                mTracker.send(new HitBuilders.EventBuilder()
+//                                        .setCategory("Action")
+//                                        .setAction("denied ALERT_WINDOWS")
+//                                        .build());
                                 finishSplash();
                                 mAlertDialog.dissmis();
                             }
@@ -122,6 +122,12 @@ public class SplashActivity extends Activity {
         }, 1000);
     }
 
+    /**
+     * 赵朋林
+     * 这个判断是否是“仿真器”不知道是干什么的？
+     * @param context
+     * @return
+     */
     boolean isEmulator(Context context) {
         try {
             TelephonyManager tm = (TelephonyManager) context

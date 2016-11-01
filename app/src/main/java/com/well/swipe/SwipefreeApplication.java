@@ -87,11 +87,11 @@ public class SwipefreeApplication extends Application {
         }
     };
 
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
-        }
-        return mTracker;
-    }
+//    synchronized public Tracker getDefaultTracker() {
+//        if (mTracker == null) {
+//            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+//            mTracker = analytics.newTracker(R.xml.global_tracker);
+//        }
+//        return mTracker;
+//    }
 }

@@ -13,7 +13,7 @@ package com.well.swipe.tools;
  */
 public class SwipeSetting {
 
-    public static final String SWIPE_TOGGLE = "swipe_toogle";
+    public static final String SWIPE_TOGGLE = "swipe_toggle";
 
     public static final String SWIPE_FOR = "swipe_for";
 
