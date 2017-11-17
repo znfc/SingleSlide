@@ -136,7 +136,8 @@ public class BubbleView extends ImageView {
     private void initManager(int x, int y) {
         mParams = new WindowManager.LayoutParams();
         mManager = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
-        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+//        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         mParams.format = PixelFormat.RGBA_8888;
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
