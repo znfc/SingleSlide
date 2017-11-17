@@ -26,8 +26,8 @@ public class SwipeWindowManager {
     public SwipeWindowManager(int x, int y, Context context) {
         mParams = new WindowManager.LayoutParams();
         mManager = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
-        //mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        mParams.type = WindowManager.LayoutParams.TYPE_PHONE;//这里如果不换成TYPE_PHONE的话那个滑动窗口滑动出来会慢慢消失
+//        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         mParams.format = PixelFormat.RGBA_8888;
         //mParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL

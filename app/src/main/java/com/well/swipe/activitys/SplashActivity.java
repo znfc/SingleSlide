@@ -46,7 +46,7 @@ public class SplashActivity extends Activity {
         SwipefreeApplication application = (SwipefreeApplication) getApplication();
 //        mTracker = application.getDefaultTracker();
 
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 startPermission();
             } else {
