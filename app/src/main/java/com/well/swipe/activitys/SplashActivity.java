@@ -1,18 +1,16 @@
 package com.well.swipe.activitys;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.well.swipe.R;
-import com.well.swipe.SwipefreeApplication;
 import com.well.swipe.service.SwipeService;
 import com.well.swipe.tools.SwipeSetting;
 import com.well.swipecomm.utils.SettingHelper;
@@ -31,34 +29,19 @@ import com.well.swipecomm.utils.SettingHelper;
 public class SplashActivity extends Activity {
 
     private final int REQUEST_ALERT_WINDOW = 1;
-
+    private final static String TAG ="SplashActivity";
     RequestAlertDialog mAlertDialog;
-
-//    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG,"onCreate");
         setContentView(R.layout.activity_splash);
-        if (isEmulator(getApplicationContext())) {
-            //Process.killProcess(android.os.Process.myPid());
-        }
-        SwipefreeApplication application = (SwipefreeApplication) getApplication();
-//        mTracker = application.getDefaultTracker();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                startPermission();
-            } else {
-                startSwipeSetting();
-            }
-        } else {
-            startSwipeSetting();
-        }
-
-
     }
 
+    /**
+     * 可出现在其他应用上的应用的界面的启动
+     */
     private void startPermission() {
         Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         intent.setData(Uri.parse("package:" + getPackageName()));
@@ -73,7 +56,8 @@ public class SplashActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        Log.i(TAG,"onResume");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this)) {
                 startSwipeSetting();
             } else {
@@ -85,24 +69,26 @@ public class SplashActivity extends Activity {
                         onPositive(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //google anylnitic
-//                                mTracker.send(new HitBuilders.EventBuilder()
-//                                        .setCategory("Action")
-//                                        .setAction("authorized ALERT_WINDOWS")
-//                                        .build());
+                                mAlertDialog.dismiss();
                                 startPermission();
-                                mAlertDialog.dissmis();
                             }
                         })
                         .onNegative(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                mTracker.send(new HitBuilders.EventBuilder()
-//                                        .setCategory("Action")
-//                                        .setAction("denied ALERT_WINDOWS")
-//                                        .build());
+                                mAlertDialog.dismiss();
                                 finishSplash();
-                                mAlertDialog.dissmis();
+                            }
+                        })
+                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if(keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0)
+                                {
+                                    mAlertDialog.dismiss();
+                                    finishSplash();
+                                }
+                                return false;
                             }
                         }).show();
             }
@@ -113,35 +99,13 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                startActivity(new Intent(getBaseContext(), SwipeSettingActivity.class));
                 if (SettingHelper.getInstance(getBaseContext()).getBoolean(SwipeSetting.SWIPE_TOGGLE, true)) {
                     startService(new Intent(getBaseContext(), SwipeService.class));
                 }
-                startActivity(new Intent(getBaseContext(), SwipeSettingActivity.class));
                 finish();
             }
-        }, 1000);
-    }
-
-    /**
-     * 赵朋林
-     * 这个判断是否是“仿真器”不知道是干什么的？
-     * @param context
-     * @return
-     */
-    boolean isEmulator(Context context) {
-        try {
-            TelephonyManager tm = (TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-            String imei = tm.getDeviceId();
-            if (imei != null && imei.equals("000000000000000")) {
-                return true;
-            }
-            return (Build.MODEL.equals("sdk"))
-                    || (Build.MODEL.equals("google_sdk"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        }, 1000);//延时1秒是为了防止闪屏
     }
 
 }

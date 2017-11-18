@@ -103,8 +103,8 @@ public class SwipeAreaDialog extends SwipeDialog {
     }
 
     @Override
-    public void dissmis() {
-        super.dissmis();
+    public void dismiss() {
+        super.dismiss();
         mItemContent.removeAllViews();
     }
 }

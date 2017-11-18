@@ -25,8 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.well.swipe.BootReceiver;
 import com.well.swipe.ItemApplication;
 import com.well.swipe.LauncherModel;
@@ -68,6 +66,7 @@ import java.util.List;
 public class SwipeService extends Service implements CatchView.OnEdgeSlidingListener, LauncherModel.Callback,
         AngleView.OnClickListener, OnDialogListener, AngleLayout.OnItemDragListener, BubbleView.OnOpenClickListener {
 
+    private final static String TAG ="SwipeService";
     SwipefreeApplication mSwipeApplication;
     /**
      * LauncherModel广播接收机负责加载和更新数据
@@ -143,16 +142,13 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("Gmw", "SwipeService_onCreate");
-        //Google
-        SwipefreeApplication application = (SwipefreeApplication) getApplication();
-//        mTracker = application.getDefaultTracker();
+        Log.i(TAG, "onCreate");
 
         mCatchViewWidth = getResources().getDimensionPixelSize(R.dimen.catch_view_width);
         mCatchViewHeight = getResources().getDimensionPixelSize(R.dimen.catch_view_height);
         mCatchViewBroadSize = getResources().getDimensionPixelSize(R.dimen.catch_view_broad_size_base);
         mSwipeApplication = (SwipefreeApplication) getApplication();
-        mLauncherModel = mSwipeApplication.setLaunchr(this);
+        mLauncherModel = mSwipeApplication.setLauncher(this);
         float pre = (float) SettingHelper.getInstance(this).getInt(SwipeSetting.SWIPE_AREA_PROGRESS, 5) / 10;
 
         mCatchViewLeft0 = new CatchView(getBaseContext());

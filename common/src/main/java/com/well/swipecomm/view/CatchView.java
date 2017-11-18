@@ -215,6 +215,7 @@ public class CatchView extends PositionStateView {
         mParams = new WindowManager.LayoutParams();
         mManager = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
 //        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        //用上边的这个type会报这个错WindowManager$BadTokenException: Unable to add window -- window has already been added
         mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         mParams.format = PixelFormat.RGBA_8888;
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL

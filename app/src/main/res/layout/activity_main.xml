@@ -32,21 +32,17 @@
             <include android:id="@+id/swipe_advanced"
                 layout="@layout/preference_title"/>
 
-
             <include
                 android:id="@+id/swipe_rate"
                 layout="@layout/preference_title" />
-
 
             <include
                 android:id="@+id/swipe_feedback"
                 layout="@layout/preference_title" />
 
-
             <include
                 android:id="@+id/swipe_version"
                 layout="@layout/preference_titlesummary" />
-
 
         </LinearLayout>
     </ScrollView>

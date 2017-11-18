@@ -5,11 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
-import android.os.*;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.well.swipe.service.SwipeService;
+import android.os.Handler;
 
 import java.lang.ref.WeakReference;
 
@@ -29,22 +25,19 @@ public class SwipefreeApplication extends Application {
 
     private WeakReference<SwipefreeProvider> mSwipeProvider;
 
-    /**
-     * GoogleAnlytatic
-     */
-    private Tracker mTracker;
-
     @Override
     public void onCreate() {
         super.onCreate();
         mIconCache = new IconCache(this);
         mModel = new LauncherModel(this, mIconCache);
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
         filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         filter.addDataScheme("package");
         registerReceiver(mModel, filter);
+
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
         filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
@@ -64,8 +57,8 @@ public class SwipefreeApplication extends Application {
         unregisterReceiver(mModel);
     }
 
-    public LauncherModel setLaunchr(SwipeService service) {
-        mModel.initCallBack(service);
+    public LauncherModel setLauncher(LauncherModel.Callback callback) {
+        mModel.initCallBack(callback);
         return mModel;
     }
 
@@ -87,11 +80,4 @@ public class SwipefreeApplication extends Application {
         }
     };
 
-//    synchronized public Tracker getDefaultTracker() {
-//        if (mTracker == null) {
-//            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-//            mTracker = analytics.newTracker(R.xml.global_tracker);
-//        }
-//        return mTracker;
-//    }
 }

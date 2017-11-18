@@ -134,7 +134,7 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                         public void onClick(View v) {
                             mSwipeFor.setValues(0);
                             mSwipeFor.refreshSummary();
-                            mDialogFor.dissmis();
+                            mDialogFor.dismiss();
                         }
                     }, mSwipeFor.getIntValue(1) == 0).
                     addItem(mSwipeFor.getSummaryArray()[1], new View.OnClickListener() {
@@ -142,7 +142,7 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                         public void onClick(View v) {
                             mSwipeFor.setValues(1);
                             mSwipeFor.refreshSummary();
-                            mDialogFor.dissmis();
+                            mDialogFor.dismiss();
                         }
                     }, mSwipeFor.getIntValue(1) == 1).
                     show();
@@ -217,13 +217,13 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                             mSwipeArea.setValues(mSwipAreaValue);
                             mSwipeArea.refreshSummary();
                             SettingHelper.getInstance(getBaseContext()).putInt(SwipeSetting.SWIPE_AREA_PROGRESS, mSeekBarProgress);
-                            mDialogArea.dissmis();
+                            mDialogArea.dismiss();
                         }
                     }).
                     onNegative(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDialogArea.dissmis();
+                            mDialogArea.dismiss();
                         }
                     }).
                     setOnShowListener(new DialogInterface.OnShowListener() {
@@ -246,13 +246,13 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                     onPositive(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDialogWhitelist.dissmis();
+                            mDialogWhitelist.dismiss();
                         }
                     }).
                     onNegative(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDialogWhitelist.dissmis();
+                            mDialogWhitelist.dismiss();
                         }
                     }).
                     setWhiteList(mService.getLauncherMode().loadWhitelist(this)).
@@ -260,7 +260,7 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                     onPositive(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDialogWhitelist.dissmis();
+                            mDialogWhitelist.dismiss();
                             mSwipeWhitelist.setTitle(String.format(getResources().getString(R.string.swipe_whitelist),
                                     mDialogWhitelist.getWhitelist().size()));
                             deleteWhitelist(getBaseContext());
@@ -270,7 +270,7 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                     onNegative(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mDialogWhitelist.dissmis();
+                            mDialogWhitelist.dismiss();
                         }
                     }).show();
 

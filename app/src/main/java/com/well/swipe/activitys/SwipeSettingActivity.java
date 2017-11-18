@@ -18,11 +18,8 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.well.swipe.ItemApplication;
 import com.well.swipe.R;
-import com.well.swipe.SwipefreeApplication;
 import com.well.swipe.preference.PreferenceCategory;
 import com.well.swipe.preference.PreferenceTitle;
 import com.well.swipe.preference.PreferenceTitleSummary;
@@ -85,8 +82,6 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
      */
     SwipeService mService;
 
-//    private Tracker mTracker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +91,6 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
         test = (TextView) findViewById(R.id.test_text);
         test.setText("density=" + this.getResources().getDisplayMetrics().density + ",swipe_dialog_for=" +
                 getResources().getDimensionPixelSize(R.dimen.test));
-
-        //Google
-        SwipefreeApplication application = (SwipefreeApplication) getApplication();
-//        mTracker = application.getDefaultTracker();
 
         mSwipeToggle = (PreferenceCategory) findViewById(R.id.swipe_toggle);
 
@@ -154,9 +145,6 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
     protected void onResume() {
         super.onResume();
         //startService(new Intent(SwipeSettingActivity.this, SwipeService.class));
-
-//        mTracker.setScreenName("SwipeSettingsActivity::onResume()");
-//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -199,7 +187,7 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
                         public void onClick(View v) {
                             mSwipeOpenType.setValues(0);
                             mSwipeOpenType.refreshSummary();
-                            mDialogOpenType.dissmis();
+                            mDialogOpenType.dismiss();
                         }
                     }, mSwipeOpenType.getIntValue() == 0)
                     .addItem(mSwipeOpenType.getSummaryArray()[1], new View.OnClickListener() {
@@ -207,7 +195,7 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
                         public void onClick(View v) {
                             mSwipeOpenType.setValues(1);
                             mSwipeOpenType.refreshSummary();
-                            mDialogOpenType.dissmis();
+                            mDialogOpenType.dismiss();
                         }
                     }, mSwipeOpenType.getIntValue() == 1)
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {

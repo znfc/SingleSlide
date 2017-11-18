@@ -94,8 +94,8 @@ public class SwipeWhitelistDialog extends SwipeDialog implements AdapterView.OnI
 
 
     @Override
-    public void dissmis() {
-        super.dissmis();
+    public void dismiss() {
+        super.dismiss();
         mItemContent.removeAllViews();
     }
 

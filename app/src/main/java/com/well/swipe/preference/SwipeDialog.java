@@ -60,7 +60,7 @@ public abstract class SwipeDialog {
         mDialog.show();
     }
 
-    public void dissmis() {
+    public void dismiss() {
         mDialog.dismiss();
     }
 
@@ -83,6 +83,11 @@ public abstract class SwipeDialog {
         return this;
     }
 
+    //主要是为了监听back键，用来实现权限窗口没有授权点击back键后dialog消失activity还在的情况
+    public SwipeDialog setOnKeyListener(DialogInterface.OnKeyListener listener) {
+        mDialog.setOnKeyListener(listener);
+        return this;
+    }
     /**
      * 留给子类实现，返回一个View作为Dialog的ContentView
      *

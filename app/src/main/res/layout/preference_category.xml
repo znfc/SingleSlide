@@ -23,7 +23,7 @@
         android:layout_toLeftOf="@id/preference_switchbtn"
         android:layout_toRightOf="@id/preference_icon"
         android:textColor="@color/white"
-        android:textSize="@dimen/preference_category_title_size" />e
+        android:textSize="@dimen/preference_category_title_size" />
 
     <com.well.swipecomm.view.SwitchButton
         android:id="@id/preference_switchbtn"

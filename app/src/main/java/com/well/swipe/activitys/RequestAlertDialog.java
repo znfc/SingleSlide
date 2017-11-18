@@ -1,6 +1,7 @@
 package com.well.swipe.activitys;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -75,4 +76,5 @@ public class RequestAlertDialog extends SwipeDialog {
         mNegativeBtn.setOnClickListener(listener);
         return this;
     }
+
 }
