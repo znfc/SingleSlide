@@ -196,9 +196,8 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                             mSeekBarProgress = progress;
-                            //mService.updataCatchView(progress / 100);
                             //Log.i("Gmw", "progress=" + (progress / 10f));
-                            mService.updataCatchView(progress / 10f);
+                            mService.updateCatchView(progress / 10f);
                         }
 
                         @Override
@@ -229,13 +228,13 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
                     setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface dialog) {
-                            mService.changColor(getResources().getColor(R.color.white));
+                            mService.changCatchVIewColor(getResources().getColor(R.color.white));
                         }
                     }).
                     setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            mService.changColor(Color.TRANSPARENT);
+                            mService.changCatchVIewColor(Color.TRANSPARENT);
                             mService.changeCatchView(SettingHelper.getInstance(getBaseContext()).getInt(SwipeSetting.SWIPE_AREA));
                         }
                     }).show();
@@ -282,7 +281,7 @@ public class SwipeSettingAdvancedActivity extends BaseSettingActivity implements
     protected void onPause() {
         super.onPause();
         if (mService != null) {
-            mService.changColor(Color.TRANSPARENT);
+            mService.changCatchVIewColor(Color.TRANSPARENT);
         }
     }
 

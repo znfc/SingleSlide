@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +21,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class AngleItemCommon extends RelativeLayout {
+public class DragView extends RelativeLayout {
 
     private ImageView mIcon;
 
@@ -41,15 +40,15 @@ public class AngleItemCommon extends RelativeLayout {
     private double mParentY;
 
 
-    public AngleItemCommon(Context context) {
+    public DragView(Context context) {
         this(context, null);
     }
 
-    public AngleItemCommon(Context context, AttributeSet attrs) {
+    public DragView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public AngleItemCommon(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DragView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

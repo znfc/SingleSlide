@@ -43,7 +43,7 @@ import java.util.Map;
  * QQ&WX：   721881283
  *
  *
- * 旋转的扇形View
+ * 旋转的扇形View 存放的都是item
  * 1.扇形可以放在左边或者右边
  * 2.根据手指在上一层容器的touch事件来处理AngleView的转动，松开手指自动转动到指定位置
  * 3.通过捕捉飞快的手指滑动来转动容器
@@ -109,7 +109,7 @@ public class AngleView extends PositionStateViewGroup {
     /**
      * AngleView点击时候找到的ItemView
      */
-    AngleItemCommon mTargetItem;
+    DragView mTargetItem;
     /**
      * 用于点击或者长按的时候计算得到的当前点击的Item的四个坐标
      */
@@ -167,18 +167,18 @@ public class AngleView extends PositionStateViewGroup {
 
     private ValueAnimator mAngleAnimator;
 
-    private Map<Integer, ArrayList<AngleItemCommon>> mMap = new HashMap<>();
+    private Map<Integer, ArrayList<DragView>> mMap = new HashMap<>();
 
-    private ArrayList<AngleItemCommon> mRecentAppList = new ArrayList<>();
+    private ArrayList<DragView> mRecentAppList = new ArrayList<>();
 
-    private ArrayList<AngleItemCommon> mSwitchList = new ArrayList<>();
+    private ArrayList<DragView> mSwitchList = new ArrayList<>();
 
-    private ArrayList<AngleItemCommon> mFavoriteAppList = new ArrayList<>();
+    private ArrayList<DragView> mFavoriteAppList = new ArrayList<>();
 
     /**
      * 删除前临时保存数据
      */
-    private ArrayList<AngleItemCommon> mDelPre = new ArrayList<>();
+    private ArrayList<DragView> mDelPre = new ArrayList<>();
 
     /**
      * 删除后临时保存数据
@@ -201,7 +201,7 @@ public class AngleView extends PositionStateViewGroup {
     /**
      * 长按处理
      */
-    private LongClickRunable mLongRunable = new LongClickRunable();
+    private LongClickRunnable mLongRunnable = new LongClickRunnable();
     /**
      * 震动
      */
@@ -267,7 +267,7 @@ public class AngleView extends PositionStateViewGroup {
          * @param offsetLeft 触摸点在当前进行拖拽的view的left距离
          * @param offsetTop  触摸点在当前进行拖拽的view的top距离
          */
-        void onStartDrag(AngleItemCommon view, float left, float top, float offsetLeft, float offsetTop);
+        void onStartDrag(DragView view, float left, float top, float offsetLeft, float offsetTop);
 
         /**
          * 拖拽取消
@@ -328,10 +328,10 @@ public class AngleView extends PositionStateViewGroup {
      */
     public void refresh() {
         removeAllViews();
-        Iterator<Map.Entry<Integer, ArrayList<AngleItemCommon>>> it = mMap.entrySet().iterator();
+        Iterator<Map.Entry<Integer, ArrayList<DragView>>> it = mMap.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Integer, ArrayList<AngleItemCommon>> arraylist = it.next();
-            ArrayList<AngleItemCommon> views = arraylist.getValue();
+            Map.Entry<Integer, ArrayList<DragView>> arraylist = it.next();
+            ArrayList<DragView> views = arraylist.getValue();
             for (View view : views) {
                 if (view.getParent() == null) {
                     addView(view);
@@ -367,7 +367,7 @@ public class AngleView extends PositionStateViewGroup {
      */
     public ArrayList<ItemApplication> getItemApplications() {
         if (getViewsIndex() == 2) {
-            ArrayList<AngleItemCommon> views = getData();
+            ArrayList<DragView> views = getData();
             if (views != null) {
                 ArrayList<ItemApplication> itemApplications = new ArrayList<>();
                 for (int i = 0; i < views.size() - 1; i++) {
@@ -406,7 +406,7 @@ public class AngleView extends PositionStateViewGroup {
      */
     public ArrayList<ItemSwipeTools> getToolsArrayList() {
         if (getViewsIndex() == 1) {
-            ArrayList<AngleItemCommon> views = getData();
+            ArrayList<DragView> views = getData();
             if (views != null) {
                 ArrayList<ItemSwipeTools> toolsArrayList = new ArrayList<>();
                 for (int i = 0; i < views.size() - 1; i++) {
@@ -422,10 +422,10 @@ public class AngleView extends PositionStateViewGroup {
     public void refreshToolsView() {
         int index = getViewsIndex();
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            AngleItemCommon itemview = mMap.get(index).get(i);
-            if (itemview instanceof AngleItemStartUp && itemview.getTag() instanceof ItemSwipeTools) {
-                ItemSwipeTools item = (ItemSwipeTools) itemview.getTag();
-                ToolsStrategy.getInstance().initView(getContext(), itemview, item);
+            DragView itemView = mMap.get(index).get(i);
+            if (itemView instanceof AngleItemStartUp && itemView.getTag() instanceof ItemSwipeTools) {
+                ItemSwipeTools item = (ItemSwipeTools) itemView.getTag();
+                ToolsStrategy.getInstance().initView(getContext(), itemView, item);
             }
         }
     }
@@ -586,7 +586,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param views 需要布局的数据组
      * @param qua   限象
      */
-    private void itemLayout(ArrayList<AngleItemCommon> views, int qua) {
+    private void itemLayout(ArrayList<DragView> views, int qua) {
         if (views != null) {
             for (int index = 0; index < views.size(); index++) {
                 /**
@@ -624,7 +624,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param qua   限象值
      * @return 返回一个包含坐标(x, y)
      */
-    public Coordinate coordinate(ArrayList<AngleItemCommon> views, int index, int qua) {
+    public Coordinate coordinate(ArrayList<DragView> views, int index, int qua) {
         int size = 0;
         /**
          * group可认为是跟随环数而变化的一个值，用来计算index非0时的子控件的角度增长
@@ -741,7 +741,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param index 索引
      * @return 返回(x, y)坐标
      */
-    public Coordinate coordinate2(ArrayList<AngleItemCommon> views, int index) {
+    public Coordinate coordinate2(ArrayList<DragView> views, int index) {
         /**
          * size按照当前views的总数，以4为区分，分别计算出<4,=4,超出4的部分剪掉4即从1，2，3重新开始计数
          */
@@ -852,7 +852,7 @@ public class AngleView extends PositionStateViewGroup {
             case MotionEvent.ACTION_DOWN:
                 mMotionX = event.getX();
                 mMotionY = event.getY();
-                ArrayList<AngleItemCommon> views = getData();
+                ArrayList<DragView> views = getData();
                 /**
                  * isRemoveFinish移除动画一处之前不允许再拖动
                  */
@@ -901,7 +901,7 @@ public class AngleView extends PositionStateViewGroup {
                                     }
                                 }
                                 if (getViewsIndex() != 0 && ((AngleItemStartUp) mTargetItem).getDelBtn().getVisibility() == View.GONE) {
-                                    handler.postDelayed(mLongRunable, 600);
+                                    handler.postDelayed(mLongRunnable, 600);
                                 }
                             } else if (mTargetItem instanceof AngleItemAddTo) {
                                 mClickType = TYPE_ADDCLICK;
@@ -916,12 +916,12 @@ public class AngleView extends PositionStateViewGroup {
                 float movenewx = event.getX();
                 float movenewy = event.getY();
                 if (Math.abs(movenewx - mMotionX) > 10 || Math.abs(movenewy - mMotionY) > 10) {
-                    handler.removeCallbacks(mLongRunable);
+                    handler.removeCallbacks(mLongRunnable);
                 }
 
                 if (isMoveDrag) {
                     isMoveDrag = false;
-                    ArrayList<AngleItemCommon> views2 = getData();
+                    ArrayList<DragView> views2 = getData();
                     if (mTargetItem != null) {
                         if (mTargetItem instanceof AngleItemStartUp) {
                             if (((AngleItemStartUp) mTargetItem).getDelBtn().getVisibility() == View.VISIBLE) {
@@ -991,7 +991,7 @@ public class AngleView extends PositionStateViewGroup {
                                 }
                             }, 140);
                         }
-                        handler.removeCallbacks(mLongRunable);
+                        handler.removeCallbacks(mLongRunnable);
                     }
                 }
                 mClickType = -1;
@@ -1008,7 +1008,7 @@ public class AngleView extends PositionStateViewGroup {
      * 准备拖动时临时生成一个位置数组
      */
     public void exchangePre() {
-        ArrayList<AngleItemCommon> views = getData();
+        ArrayList<DragView> views = getData();
         if (views != null) {
             mExchangePre.clear();
             for (int index = 0; index < views.size(); index++) {
@@ -1053,14 +1053,14 @@ public class AngleView extends PositionStateViewGroup {
                              * 触发交换的时候更新index值
                              */
                             mDragTargetIndex = index;
-                            ArrayList<AngleItemCommon> arrayList = new ArrayList<>();
+                            ArrayList<DragView> arrayList = new ArrayList<>();
                             arrayList.clear();
                             arrayList.addAll(getData());
                             /**
                              * 交换数据
                              */
 
-                            AngleItemCommon temp = arrayList.get(index);
+                            DragView temp = arrayList.get(index);
                             arrayList.set(index, arrayList.get(mTargetItem.getIndex()));
                             arrayList.set(mTargetItem.getIndex(), temp);
 
@@ -1072,7 +1072,7 @@ public class AngleView extends PositionStateViewGroup {
                                 arrayList.get(i).setIndex(i);
                             }
 
-                            ArrayList<AngleItemCommon> views = arrayList;
+                            ArrayList<DragView> views = arrayList;
                             Coordinate coordinateTest = null;
                             if (views != null) {
                                 //mExchangeNext.clear();
@@ -1111,7 +1111,7 @@ public class AngleView extends PositionStateViewGroup {
      * @return 返回(x, y)坐标
      */
     public Coordinate findEmpty() {
-        ArrayList<AngleItemCommon> views = getData();
+        ArrayList<DragView> views = getData();
         if (views != null) {
             for (int index = 0; index < views.size(); index++) {
                 if (index == mDragTargetIndex) {
@@ -1153,7 +1153,7 @@ public class AngleView extends PositionStateViewGroup {
                     mDelPre.addAll(getData());
                     mDelPre.remove(mTargetItem);
 
-                    ArrayList<AngleItemCommon> views = mDelPre;
+                    ArrayList<DragView> views = mDelPre;
                     if (views != null) {
                         mDelNext.clear();
                         for (int index = 0; index < views.size(); index++) {
@@ -1188,7 +1188,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param resource   移除控件之后计算产生的新的item坐标
      * @param targetView 原始坐标
      */
-    public void transAnimator(final ArrayList<Coordinate> resource, final ArrayList<AngleItemCommon> targetView) {
+    public void transAnimator(final ArrayList<Coordinate> resource, final ArrayList<DragView> targetView) {
         ValueAnimator translation = ValueAnimator.ofFloat(0f, 1f);
         translation.setDuration(250);
         translation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1240,7 +1240,7 @@ public class AngleView extends PositionStateViewGroup {
         translation.start();
     }
 
-    public void exchange(final Coordinate recource, AngleItemCommon targetview, final int index) {
+    public void exchange(final Coordinate recource, DragView targetview, final int index) {
 
     }
 
@@ -1253,7 +1253,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param targetView 目标坐标，也就是动画的终点坐标
      * @param index      当前view交换之后的目标位置的index索引，主要用来屏蔽动画，因为松手之后有动画，不需要这这里再加动画了
      */
-    public void exchangeAnimator(final Coordinate resource, final ArrayList<AngleItemCommon> targetView, final int index) {
+    public void exchangeAnimator(final Coordinate resource, final ArrayList<DragView> targetView, final int index) {
         ValueAnimator translation = ValueAnimator.ofFloat(0f, 1f);
         translation.setDuration(250);
         translation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1703,11 +1703,11 @@ public class AngleView extends PositionStateViewGroup {
      *
      * @return 当前显示在第0限象位置的数据
      */
-    public ArrayList<AngleItemCommon> getData() {
+    public ArrayList<DragView> getData() {
         return mMap.get(getViewsIndex());
     }
 
-    public void putData(ArrayList<AngleItemCommon> arrayList) {
+    public void putData(ArrayList<DragView> arrayList) {
         mMap.put(getViewsIndex(), arrayList);
         refresh();
     }
@@ -1750,7 +1750,7 @@ public class AngleView extends PositionStateViewGroup {
         int index = getViewsIndex();
 
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            AngleItemCommon item = mMap.get(index).get(i);
+            DragView item = mMap.get(index).get(i);
             if (item instanceof AngleItemStartUp) {
                 ((AngleItemStartUp) item).showDelBtn();
             }
@@ -1764,7 +1764,7 @@ public class AngleView extends PositionStateViewGroup {
         isMoveDrag = true;
         int index = getViewsIndex();
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            AngleItemCommon item = mMap.get(index).get(i);
+            DragView item = mMap.get(index).get(i);
             if (item instanceof AngleItemStartUp) {
                 ((AngleItemStartUp) item).hideDelBtn();
             }
@@ -1780,7 +1780,7 @@ public class AngleView extends PositionStateViewGroup {
         return mChildHalfSize;
     }
 
-    public AngleItemCommon getTargetItem() {
+    public DragView getTargetItem() {
         return mTargetItem;
     }
 
@@ -1807,7 +1807,7 @@ public class AngleView extends PositionStateViewGroup {
         valueAnimator.start();
     }
 
-    public class LongClickRunable implements Runnable {
+    public class LongClickRunnable implements Runnable {
         @Override
         public void run() {
             if (mOnEditModeChangeListener != null) {

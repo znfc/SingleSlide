@@ -25,7 +25,6 @@ import com.well.swipecomm.view.PositionState;
 /**
  * Created by mingwei on 2/26/16.
  *
- *
  * 微博：     明伟小学生(http://weibo.com/u/2382477985)
  * Github:   https://github.com/gumingwei
  * CSDN:     http://blog.csdn.net/u013045971
@@ -34,7 +33,7 @@ import com.well.swipecomm.view.PositionState;
  *
  */
 public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeListener,
-        AngleIndicatorView.OnIndexChangedLitener, AngleView.OnEditModeChangeListener, CornerView.OnCornerClickListener,
+        AngleIndicatorView.OnIndexChangedListener, AngleView.OnEditModeChangeListener, CornerView.OnCornerClickListener,
         AngleView.OnBindListener {
     
     private Context mContext;
@@ -43,7 +42,7 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
      */
     private AngleView mAngleView;
     /**
-     * AngleView主题
+     * AngleView主题 其实就是背景 如果可以自定义的话就是主题
      */
     private AngleViewTheme mAngleViewTheme;
     /**
@@ -51,11 +50,11 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
      */
     private int mAngleSize;
     /**
-     * 底部的指示器
+     * 底部的指示器 （最近使用 快捷开关 常用应用）
      */
     private AngleIndicatorView mIndicator;
     /**
-     * AngleIndicatorView主题
+     * AngleIndicatorView主题 就是那个类似于扇叶的会转的那个view
      */
     private AngleIndicatorViewTheme mIndicatorTheme;
     /**
@@ -144,11 +143,10 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
     /**
      * 切换状态，开和关
      */
+    public static final int SWITCH_TYPE_ON = 0;
+    public static final int SWITCH_TYPE_OFF = 1;
     private int mSwitchType = SWITCH_TYPE_OFF;
 
-    public static final int SWITCH_TYPE_ON = 0;
-
-    public static final int SWITCH_TYPE_OFF = 1;
     /**
      * AngleView 的编辑状态
      */
@@ -185,7 +183,7 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
 
     public interface OnOffListener extends OnScaleChangeListener {
         /**
-         * 当Angle关闭的时候回调,目的是通知SwipeLayout去dissmis
+         * 当Angle关闭的时候回调,目的是通知SwipeLayout去dismiss
          */
         void onOff();
     }
@@ -298,8 +296,6 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
             mAngleViewTheme.layout(0, mHeight - mAngleSize, mAngleSize, mHeight);
             mIndicator.layout(0, mHeight - mIndicatorSize, mIndicatorSize, mHeight);
             mIndicatorTheme.layout(0, mHeight - mIndicatorThemeSize, mIndicatorThemeSize, mHeight);
-            //mAngleLogo.layout(0, mHeight - mAngleLogoSize, mAngleLogoSize, mHeight);
-            //mAngleLogo.setRotationY(0);
             mIndicatorTheme.setPivotX(0);
             mIndicatorTheme.setPivotY(mIndicatorThemeSize);
             mCornerView.layout(0, mHeight - mAngleLogoSize, mAngleLogoSize, mHeight);
@@ -313,8 +309,6 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
             mAngleViewTheme.layout(mWidth - mAngleSize, mHeight - mAngleSize, mWidth, mHeight);
             mIndicator.layout(mWidth - mIndicatorSize, mHeight - mIndicatorSize, mWidth, mHeight);
             mIndicatorTheme.layout(mWidth - mIndicatorThemeSize, mHeight - mIndicatorThemeSize, mWidth, mHeight);
-            //mAngleLogo.layout(mWidth - mAngleLogoSize, mHeight - mAngleLogoSize, mWidth, mHeight);
-            //mAngleLogo.setRotationY(180);
             mIndicatorTheme.setPivotX(mIndicatorThemeSize);
             mIndicatorTheme.setPivotY(mIndicatorThemeSize);
             mCornerView.layout(mWidth - mAngleLogoSize, mHeight - mAngleLogoSize, mWidth, mHeight);
@@ -620,10 +614,10 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
     /**
      * 拖拽前赋的值，在松开手之后用来结束时隐藏拖拽View的替身
      */
-    AngleItemCommon mTargetView;
+    DragView mTargetView;
 
     @Override
-    public void onStartDrag(AngleItemCommon view, float newleft, float newtop, float offsetLeft, float offsetTop) {
+    public void onStartDrag(DragView view, float newleft, float newtop, float offsetLeft, float offsetTop) {
 
         mTargetView = view;
         if (isRestoreFinish) {
@@ -1128,7 +1122,6 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
         }
 
     }
-
 
     /**
      * 返回AngleView

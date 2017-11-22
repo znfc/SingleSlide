@@ -19,8 +19,8 @@ import com.well.swipecomm.view.PositionStateView;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
- * 默认蓝色的指示器
+ * zhaopenglin
+ * 默认蓝色的指示器view 覆盖在（ 最近应用 快捷开关 常用应用 ）字体上的那个衫环形的视图
  */
 public class AngleIndicatorViewTheme extends PositionStateView {
 

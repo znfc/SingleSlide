@@ -58,9 +58,20 @@ public class SplashActivity extends Activity {
         super.onResume();
         Log.i(TAG,"onResume");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.i(TAG,"Build.VERSION.SDK_INT:"+Build.VERSION.SDK_INT);
             if (Settings.canDrawOverlays(this)) {
-                startSwipeSetting();
+                Log.i(TAG,"canDrawOverlays");
+                if (!Settings.System.canWrite(this)) {//获取系统调节亮度权限的写权限
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    //有了权限，再启动应用
+                    startSwipeSetting();
+                }
             } else {
+                Log.i(TAG,"canDrawOverlays is not");
                 mAlertDialog = new RequestAlertDialog(this);
                 mAlertDialog.setTitle(getString(R.string.request_windows_title)).
                         setContentDes(getString(R.string.request_windows_content)).

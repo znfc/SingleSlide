@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import com.well.swipe.R;
 import com.well.swipecomm.utils.SwipeWindowManager;
-import com.well.swipecomm.view.SwipeToast;
 
 
 /**
@@ -24,6 +23,8 @@ import com.well.swipecomm.view.SwipeToast;
  * Github:   https://github.com/gumingwei
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
+ *
+ *
  */
 public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffListener {
 
@@ -51,10 +52,12 @@ public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffList
         super(context, attrs, defStyleAttr);
 
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        mFavoriteLayout = (SwipeEditFavoriteEditDialog) LayoutInflater.from(context).inflate(R.layout.swipe_edit_favorite_layout, null);
+        mFavoriteLayout = (SwipeEditFavoriteEditDialog) LayoutInflater.from(context)
+                .inflate(R.layout.swipe_edit_favorite_layout, null);
         addView(mFavoriteLayout, params);
 
-        mToolsLayout = (SwipeEditToolsEditDialog) LayoutInflater.from(context).inflate(R.layout.swipe_edit_tools_layout, null);
+        mToolsLayout = (SwipeEditToolsEditDialog) LayoutInflater.from(context)
+                .inflate(R.layout.swipe_edit_tools_layout, null);
         addView(mToolsLayout, params);
     }
 

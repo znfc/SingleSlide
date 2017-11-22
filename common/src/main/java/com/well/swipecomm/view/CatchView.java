@@ -25,9 +25,9 @@ import com.well.swipecomm.utils.Utils;
  * Github:   https://github.com/gumingwei
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
- * <p/>
- * <p/>
- * 作为触发屏幕触摸事件的View
+ *
+ * zhaopenglin
+ * 作为触发屏幕触摸事件的View 就是屏幕左下角或者右下角的那个透明的长方形view
  */
 public class CatchView extends PositionStateView {
 
@@ -80,20 +80,19 @@ public class CatchView extends PositionStateView {
 
     private int mMaximumVelocity, mMinmumVelocity;
 
+    /**
+     * 这个接口的作用是catchView检测到合适的时机用来打开扇形view的
+     * 这个扇形view是另外一个view，个人理解catchView不直接打开扇形View是MVC模式下view和view之间的交互也要交给
+     * Controller来处理也就是交给SwipeService来处理，所以这个接口的实现者是SwipeService
+     */
     public interface OnEdgeSlidingListener extends OnScaleChangeListener {
-        /**
-         * 打开
-         */
-        void openLeft();
 
-        void openRight();
+        void openLeft();    //打开左边的扇形view
+        void openRight();   //打开右边的扇形view
 
         /**
-         * true速度满足自动打开
-         * false速度不满足根据抬手时的状态来判断是否打开
-         *
-         * @param view
-         * @param flag
+         * @param view 就是CatchView
+         * @param flag true速度满足自动打开，false速度不满足根据抬手时的状态来判断是否打开
          */
         void cancel(View view, boolean flag);
 
@@ -134,14 +133,6 @@ public class CatchView extends PositionStateView {
         canvas.drawRect(mRect, mPaint);
     }
 
-    private boolean dispatchInnerChild(MotionEvent ev) {
-        ev.setAction(MotionEvent.ACTION_CANCEL);
-        MotionEvent newMotionEvent = MotionEvent.obtain(ev);
-        dispatchTouchEvent(ev);
-        newMotionEvent.setAction(MotionEvent.ACTION_DOWN);
-        return dispatchTouchEvent(newMotionEvent);
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -155,13 +146,15 @@ public class CatchView extends PositionStateView {
                 float newx = event.getX();
                 float newy = event.getY();
                 if (mPositionState == PositionState.POSITION_STATE_LEFT) {
-                    if (newx - mLastX > mTouchSlop && Math.abs(newy - mLastY) > mTouchSlop && mTouchState != TOUCH_STATE_SLIDE) {
+                    if (newx - mLastX > mTouchSlop && Math.abs(newy - mLastY) > mTouchSlop
+                            && mTouchState != TOUCH_STATE_SLIDE) {
                         mTouchState = TOUCH_STATE_SLIDE;
                         mListener.openLeft();
 
                     }
                 } else if (mPositionState == PositionState.POSITION_STATE_RIGHT) {
-                    if (Math.abs(newx - mLastX) > mTouchSlop && Math.abs(newy - mLastY) > mTouchSlop && mTouchState != TOUCH_STATE_SLIDE) {
+                    if (Math.abs(newx - mLastX) > mTouchSlop && Math.abs(newy - mLastY) > mTouchSlop
+                            && mTouchState != TOUCH_STATE_SLIDE) {
                         mTouchState = TOUCH_STATE_SLIDE;
                         mListener.openRight();
 
@@ -185,11 +178,11 @@ public class CatchView extends PositionStateView {
                 } else {
                     mListener.cancel(this, false);
                 }
-                recyleVelocityTracker();
+                recycleVelocityTracker();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 mListener.cancel(this, false);
-                recyleVelocityTracker();
+                recycleVelocityTracker();
                 break;
         }
         return true;
@@ -211,15 +204,17 @@ public class CatchView extends PositionStateView {
      * @param x
      * @param y
      */
-    private void initManager(int x, int y) {
+    private void initWindowManager(int x, int y) {
         mParams = new WindowManager.LayoutParams();
         mManager = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
 //        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         //用上边的这个type会报这个错WindowManager$BadTokenException: Unable to add window -- window has already been added
         mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         mParams.format = PixelFormat.RGBA_8888;
-        mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+        mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         mParams.gravity = Gravity.LEFT | Gravity.TOP;
         if (mPositionState == PositionState.POSITION_STATE_LEFT) {
             mParams.x = 0;
@@ -234,7 +229,7 @@ public class CatchView extends PositionStateView {
 
     public void setState(int state, int left, int top, int width, int height) {
         mPositionState = state;
-        initManager(mDisplayWidth, mDisplayHeight);
+        initWindowManager(mDisplayWidth, mDisplayHeight);
         initRect(left, top, width, height);
     }
 
@@ -254,29 +249,37 @@ public class CatchView extends PositionStateView {
         invalidate();
     }
 
-    public boolean isManager() {
+    public boolean isManagerNotNull() {
         return mManager != null;
     }
 
+    /**
+     * show的意思就是在WindowManager上添加此view
+     */
     public void show() {
-        if (isManager()) {
+        if (isManagerNotNull()) {
             if (this.getParent() == null) {
                 mManager.addView(this, mParams);
             }
         }
     }
 
-    public void updata() {
-        if (isManager()) {
+    /**
+     * update的意思就是在WindowManager上更新此view
+     */
+    public void update() {
+        if (isManagerNotNull()) {
             if (this.getParent() != null) {
                 mManager.updateViewLayout(this, mParams);
             }
         }
     }
 
-
+    /**
+     * dismiss的意思就是在WindowManager上移除此view
+     */
     public void dismiss() {
-        if (isManager()) {
+        if (isManagerNotNull()) {
             if (this.getParent() != null) {
                 mManager.removeView(this);
             }
@@ -302,7 +305,7 @@ public class CatchView extends PositionStateView {
     /**
      * 回收VelocityTracker
      */
-    private void recyleVelocityTracker() {
+    private void recycleVelocityTracker() {
         if (mVelocityTracker != null) {
             mVelocityTracker.recycle();
             mVelocityTracker = null;

@@ -3,14 +3,9 @@ package com.well.swipe.view;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.well.swipe.R;
 
@@ -25,7 +20,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class AngleItemStartUp extends AngleItemCommon {
+public class AngleItemStartUp extends DragView {
 
     private ImageView mDelIcon;
 

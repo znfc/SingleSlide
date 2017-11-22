@@ -29,13 +29,11 @@ public class AllAppsList {
     /**
      * The list off all apps.
      */
-    public ArrayList<ItemApplication> data =
-            new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
+    public ArrayList<ItemApplication> data = new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
     /**
      * The list of apps that have been added since the last notify() call.
      */
-    public ArrayList<ItemApplication> added =
-            new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
+    public ArrayList<ItemApplication> added = new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
     /**
      * The list of apps that have been removed since the last notify() call.
      */

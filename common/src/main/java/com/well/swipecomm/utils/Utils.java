@@ -36,10 +36,10 @@ public class Utils {
     }
 
     /**
-     * 状态栏的高度
+     * 获取状态栏的高度
      *
-     * @param c
-     * @return
+     * @param c Context 用来将dp转为px用的
+     * @return 状态栏的高度  返回int型px值（进行四舍五入）
      */
     public static int getStatusBarHeight(Context c) {
         int h = 0;

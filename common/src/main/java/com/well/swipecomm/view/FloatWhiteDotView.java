@@ -25,7 +25,7 @@ import com.well.swipecomm.utils.Utils;
  *
  *
  */
-public class BubbleView extends ImageView {
+public class FloatWhiteDotView extends ImageView {
 
     private static final String POSITION_X = "bubble_x_in_screen";
 
@@ -64,15 +64,15 @@ public class BubbleView extends ImageView {
         void onOpenClick();
     }
 
-    public BubbleView(Context context) {
+    public FloatWhiteDotView(Context context) {
         this(context, null);
     }
 
-    public BubbleView(Context context, AttributeSet attrs) {
+    public FloatWhiteDotView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public BubbleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FloatWhiteDotView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setImageDrawable(context.getResources().getDrawable(R.drawable.swipe_whitedot_pressed));
         mStatusH = Utils.getStatusBarHeight(context);

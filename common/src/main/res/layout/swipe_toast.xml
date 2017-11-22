@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.well.swipe.view.SwipeToast xmlns:android="http://schemas.android.com/apk/res/android"
+<com.well.swipecomm.view.SwipeToast xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
@@ -17,4 +17,4 @@
         android:textColor="@color/swipe_header_title_color"
         android:textSize="@dimen/swipe_toast_title_size" />
 
-</com.well.swipe.view.SwipeToast>
+</com.well.swipecomm.view.SwipeToast>

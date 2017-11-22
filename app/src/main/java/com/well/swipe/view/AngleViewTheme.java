@@ -19,7 +19,9 @@ import com.well.swipecomm.view.PositionStateView;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
+ * zhaopenglin
+ * 这个是打开视图后衬托icon的灰色透明背景和indicator的灰色透明背景，垃圾箱默认是绿色估计是垃圾箱自己的view设置的背景
+ * 其实就是在左下角或者右下角画了几个同心圆然后设置了叠放模式为与运算，叠了三个导致视觉上中间有一个分割线看上去是两个view
  */
 public class AngleViewTheme extends PositionStateView {
 

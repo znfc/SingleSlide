@@ -151,7 +151,7 @@ public class SwipeSettingActivity extends BaseSettingActivity implements View.On
     protected void onPause() {
         super.onPause();
         if (mService != null) {
-            mService.changColor(Color.TRANSPARENT);
+            mService.changCatchVIewColor(Color.TRANSPARENT);
         }
     }
 

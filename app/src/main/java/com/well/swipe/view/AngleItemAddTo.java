@@ -14,7 +14,7 @@ import android.util.AttributeSet;
  *
  *
  */
-public class AngleItemAddTo extends AngleItemCommon {
+public class AngleItemAddTo extends DragView {
 
     public AngleItemAddTo(Context context) {
         super(context);

@@ -1,11 +1,8 @@
 package com.well.swipe.view;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.well.swipe.R;
 
@@ -20,7 +17,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class GridLayoutItemView extends AngleItemCommon {
+public class GridLayoutItemView extends DragView {
 
     private CheckBox mCheckBox;
 

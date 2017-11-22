@@ -13,7 +13,7 @@ import com.well.swipe.ItemSwipeTools;
 import com.well.swipe.R;
 import com.well.swipe.activitys.SwipeSettingActivity;
 import com.well.swipecomm.utils.Utils;
-import com.well.swipe.view.AngleItemCommon;
+import com.well.swipe.view.DragView;
 import com.well.swipe.view.AngleItemStartUp;
 import com.well.swipe.view.SwipeLayout;
 
@@ -54,7 +54,7 @@ public class ToolsStrategy {
      * @param itemview
      * @param item
      */
-    public void initView(Context context, AngleItemCommon itemview, ItemSwipeTools item) {
+    public void initView(Context context, DragView itemview, ItemSwipeTools item) {
         if (item.mAction.equals(context.getString(R.string.swipe_flash))) {
             /**
              * 手电筒

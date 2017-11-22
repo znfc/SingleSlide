@@ -7,12 +7,15 @@
     android:orientation="vertical">
 
     <!--android:background="#d3000000"-->
+    <!--这个LinearLayout就是打开扇形之后整个屏幕的背景-->
     <LinearLayout
         android:id="@+id/swipe_bg_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/anglelayout_background"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical">
+
+    </LinearLayout>
 
     <include layout="@layout/angle_layout" />
 

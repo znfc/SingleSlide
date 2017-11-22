@@ -24,8 +24,8 @@ import com.well.swipecomm.view.PositionStateView;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
- * AngleLayout的指示器
+ * zhaopenglin
+ * AngleLayout的指示器 里边有 最近使用、快捷开关、常用应用
  */
 public class AngleIndicatorView extends PositionStateView {
 
@@ -78,9 +78,9 @@ public class AngleIndicatorView extends PositionStateView {
 
     public int mRect;
 
-    private OnIndexChangedLitener mListener;
+    private OnIndexChangedListener mListener;
 
-    public interface OnIndexChangedLitener {
+    public interface OnIndexChangedListener {
         /**
          * 状态选中时
          *
@@ -182,7 +182,7 @@ public class AngleIndicatorView extends PositionStateView {
      *
      * @param listener
      */
-    public void setOnChangeListener(OnIndexChangedLitener listener) {
+    public void setOnChangeListener(OnIndexChangedListener listener) {
         mListener = listener;
     }
 
