@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
+ * zhaopenglin
+ * 这个是常用应用的选择弹出框选择器和它相似的有一个快捷应用弹出框选择器
  */
 public class SwipeEditFavoriteEditDialog extends SwipeEditDialog implements View.OnClickListener {
 
@@ -286,7 +287,7 @@ public class SwipeEditFavoriteEditDialog extends SwipeEditDialog implements View
         } else if (v instanceof GridLayoutItemView) {
             ItemApplication itemapp = (ItemApplication) v.getTag();
             GridLayoutItemView itemview = (GridLayoutItemView) v;
-            if (itemview.getCheckBox().isChecked() == true) {
+            if (itemview.getCheckBox().isChecked()) {
                 //delete
                 int index = findAppInHeader(itemapp);
                 if (index > -1) {

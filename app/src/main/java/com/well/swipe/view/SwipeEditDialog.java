@@ -21,7 +21,8 @@ import com.well.swipecomm.view.OnDialogListener;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
+ * zhaopenglin
+ * 这个是应用的选择弹出框选择器的父类，有两个子类一个是快捷应用的一个是常用应用的
  */
 public abstract class SwipeEditDialog extends RelativeLayout {
 
@@ -60,6 +61,7 @@ public abstract class SwipeEditDialog extends RelativeLayout {
         mContentLayout = (LinearLayout) findViewById(R.id.swipe_edit_content);
         mPositiveBtn = (Button) findViewById(R.id.swipe_edit_footer_ok);
         mNegativeBtn = (Button) findViewById(R.id.swipe_edit_footer_cancel);
+
         mContentLayout.addView(createContentView());
     }
 

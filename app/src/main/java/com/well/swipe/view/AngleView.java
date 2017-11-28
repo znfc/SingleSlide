@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +54,7 @@ import java.util.Map;
  * 7.拖拽到垃圾箱
  */
 public class AngleView extends PositionStateViewGroup {
+    private static final String TAG = "AngleView";
     /**
      * 旋转的基数角度
      */
@@ -109,7 +111,7 @@ public class AngleView extends PositionStateViewGroup {
     /**
      * AngleView点击时候找到的ItemView
      */
-    DragView mTargetItem;
+    BubbleTextView mTargetItem;
     /**
      * 用于点击或者长按的时候计算得到的当前点击的Item的四个坐标
      */
@@ -133,7 +135,18 @@ public class AngleView extends PositionStateViewGroup {
 
     public static final int ANGLE_STATE_INVERSE = 2;
 
-    public static final int DEGREES_360 = 360;
+    /**
+     * 关于象限计算 zhaopenglin 2017 11 28
+     *
+     * 单手滑滑的应用每次打开的时候是1/4圆，也就是90度也可以称之为一个象限，那就有0 1 2 3四个象限
+     * 但是我们的应用只有 最近使用 快捷开关 常用应用 占用三个象限 那就是占用了 0 1 2 三个象限，我们的应用占用了三个
+     * 每划过我们应用的一页就是划过一个象限，为了能让三个象限能循环切换我们用3*4*90（3和4的最小公倍数是12）这样每次
+     * 划过一个象限就增减或者减少90度，那么用剩下的度数除以90再除以3就得到了相应的象限了
+     * 以90位单位会有以下倍数   0 1 2 3 4 5 6 7 8 9 10 11
+     *       对应的真实象限：  0 1 2 3 0 1 2 3 0 1  2  3
+     * 用倍数除以3得到的象限：  0 1 2 0 1 2 0 1 2 0  1  2
+     */
+    public static final int DEGREES_360 = 4*90;
 
     public static final int DEGREES_1080 = DEGREES_360 * 3;
 
@@ -167,18 +180,21 @@ public class AngleView extends PositionStateViewGroup {
 
     private ValueAnimator mAngleAnimator;
 
-    private Map<Integer, ArrayList<DragView>> mMap = new HashMap<>();
+    /**
+     * mMap 是保存mRecentAppList，mSwitchList和mFavoriteAppList 三个列表的集合。
+     */
+    private Map<Integer, ArrayList<BubbleTextView>> mMap = new HashMap<>();
 
-    private ArrayList<DragView> mRecentAppList = new ArrayList<>();
+    private ArrayList<BubbleTextView> mRecentAppList = new ArrayList<>();
 
-    private ArrayList<DragView> mSwitchList = new ArrayList<>();
+    private ArrayList<BubbleTextView> mSwitchList = new ArrayList<>();
 
-    private ArrayList<DragView> mFavoriteAppList = new ArrayList<>();
+    private ArrayList<BubbleTextView> mFavoriteAppList = new ArrayList<>();
 
     /**
      * 删除前临时保存数据
      */
-    private ArrayList<DragView> mDelPre = new ArrayList<>();
+    private ArrayList<BubbleTextView> mDelPre = new ArrayList<>();
 
     /**
      * 删除后临时保存数据
@@ -267,7 +283,7 @@ public class AngleView extends PositionStateViewGroup {
          * @param offsetLeft 触摸点在当前进行拖拽的view的left距离
          * @param offsetTop  触摸点在当前进行拖拽的view的top距离
          */
-        void onStartDrag(DragView view, float left, float top, float offsetLeft, float offsetTop);
+        void onStartDrag(BubbleTextView view, float left, float top, float offsetLeft, float offsetTop);
 
         /**
          * 拖拽取消
@@ -288,6 +304,7 @@ public class AngleView extends PositionStateViewGroup {
 
     /**
      * 临时坐标信息
+     * coordinate  n. 坐标；同等的人或物  adj. 并列的；同等的 vt. 调整；整合 vi. 协调
      */
     class Coordinate {
 
@@ -317,6 +334,10 @@ public class AngleView extends PositionStateViewGroup {
         mOuterRadius = getResources().getDimensionPixelSize(R.dimen.angleview_outer_radius);
         mDeleteBtnSize = getResources().getDimensionPixelSize(R.dimen.angleview_item_delete_size);
 
+        /**
+         * mMap 集合存的是 mRecentAppList ， mSwitchList和mFavoriteAppList的引用所以 这三个ArrayList集合
+         * 在自己的对象里添加和删除在mMap里获得都是最新的数据
+         */
         mMap.put(TYPE_RECENT, mRecentAppList);
         mMap.put(TYPE_TOOLS, mSwitchList);
         mMap.put(TYPE_FAVORITE, mFavoriteAppList);
@@ -328,10 +349,10 @@ public class AngleView extends PositionStateViewGroup {
      */
     public void refresh() {
         removeAllViews();
-        Iterator<Map.Entry<Integer, ArrayList<DragView>>> it = mMap.entrySet().iterator();
+        Iterator<Map.Entry<Integer, ArrayList<BubbleTextView>>> it = mMap.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Integer, ArrayList<DragView>> arraylist = it.next();
-            ArrayList<DragView> views = arraylist.getValue();
+            Map.Entry<Integer, ArrayList<BubbleTextView>> arraylist = it.next();
+            ArrayList<BubbleTextView> views = arraylist.getValue();
             for (View view : views) {
                 if (view.getParent() == null) {
                     addView(view);
@@ -367,7 +388,7 @@ public class AngleView extends PositionStateViewGroup {
      */
     public ArrayList<ItemApplication> getItemApplications() {
         if (getViewsIndex() == 2) {
-            ArrayList<DragView> views = getData();
+            ArrayList<BubbleTextView> views = getData();
             if (views != null) {
                 ArrayList<ItemApplication> itemApplications = new ArrayList<>();
                 for (int i = 0; i < views.size() - 1; i++) {
@@ -406,7 +427,7 @@ public class AngleView extends PositionStateViewGroup {
      */
     public ArrayList<ItemSwipeTools> getToolsArrayList() {
         if (getViewsIndex() == 1) {
-            ArrayList<DragView> views = getData();
+            ArrayList<BubbleTextView> views = getData();
             if (views != null) {
                 ArrayList<ItemSwipeTools> toolsArrayList = new ArrayList<>();
                 for (int i = 0; i < views.size() - 1; i++) {
@@ -422,7 +443,7 @@ public class AngleView extends PositionStateViewGroup {
     public void refreshToolsView() {
         int index = getViewsIndex();
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            DragView itemView = mMap.get(index).get(i);
+            BubbleTextView itemView = mMap.get(index).get(i);
             if (itemView instanceof AngleItemStartUp && itemView.getTag() instanceof ItemSwipeTools) {
                 ItemSwipeTools item = (ItemSwipeTools) itemView.getTag();
                 ToolsStrategy.getInstance().initView(getContext(), itemView, item);
@@ -548,10 +569,11 @@ public class AngleView extends PositionStateViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int index = (int) ((mBaseAngle) / DEGREES_90);
+        Log.i(TAG,"onLayout: changed:"+changed+",l:"+l+",t:"+t+",r:"+r+",b:"+b+",index:"+index+",mBaseAngle:"+mBaseAngle);
         if (isLeft()) {
-            itemLayout(index);
+            allItemsLayoutOnLeft(index);
         } else if (isRight()) {
-            itemLayout2(index);
+            allItemLayoutOnRight(index);
         }
     }
 
@@ -561,7 +583,7 @@ public class AngleView extends PositionStateViewGroup {
      *
      * @param index
      */
-    private void itemLayout(int index) {
+    private void allItemsLayoutOnLeft(int index) {
         mCurrentIndex = getRealIndex(index);
         itemLayout(mMap.get(getPreViewsIndex(getViewsIndex(index))), getPreQuaIndex(getQuaIndex(index)));
         itemLayout(mMap.get(getViewsIndex(index)), getQuaIndex(index));
@@ -573,7 +595,7 @@ public class AngleView extends PositionStateViewGroup {
      *
      * @param index
      */
-    private void itemLayout2(int index) {
+    private void allItemLayoutOnRight(int index) {
         mCurrentIndex = index;
         itemLayout(mMap.get(getPreViewsIndex(getViewsIndex2(index))), getPreQuaIndex(getQuaIndex2(index)));
         itemLayout(mMap.get(getViewsIndex2(index)), getQuaIndex2(index));
@@ -586,7 +608,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param views 需要布局的数据组
      * @param qua   限象
      */
-    private void itemLayout(ArrayList<DragView> views, int qua) {
+    private void itemLayout(ArrayList<BubbleTextView> views, int qua) {
         if (views != null) {
             for (int index = 0; index < views.size(); index++) {
                 /**
@@ -608,8 +630,10 @@ public class AngleView extends PositionStateViewGroup {
                 if (index < 9) {
                     views.get(index).setParentX(coordinate.x);
                     views.get(index).setParentY(coordinate.y);
-                    views.get(index).layout((int) (coordinate.x - mChildHalfSize), (int) (coordinate.y - mChildHalfSize),
-                            (int) (coordinate.x + mChildHalfSize), (int) (coordinate.y + mChildHalfSize));
+                    views.get(index).layout((int) (coordinate.x - mChildHalfSize),
+                            (int) (coordinate.y - mChildHalfSize),
+                            (int) (coordinate.x + mChildHalfSize),
+                            (int) (coordinate.y + mChildHalfSize));
                 }
             }
         }
@@ -624,16 +648,12 @@ public class AngleView extends PositionStateViewGroup {
      * @param qua   限象值
      * @return 返回一个包含坐标(x, y)
      */
-    public Coordinate coordinate(ArrayList<DragView> views, int index, int qua) {
+    public Coordinate coordinate(ArrayList<BubbleTextView> views, int index, int qua) {
         int size = 0;
         /**
          * group可认为是跟随环数而变化的一个值，用来计算index非0时的子控件的角度增长
          * 角度增为只有一个子控件的时候：90/1=45；
          * index非0的时候：(group＋0.5)*newdegree(按照当前环中子控件的总数平分90的值)
-         * 微博：     明伟小学生(http://weibo.com/u/2382477985)
-         * Github:   https://github.com/gumingwei
-         * CSDN:     http://blog.csdn.net/u013045971
-         * QQ：      721881283
          */
         int group = 0;
         /**
@@ -699,8 +719,8 @@ public class AngleView extends PositionStateViewGroup {
          * 2.子控件根据不同的呃限象旋转位置满足在第0限象的正常显示效果
          * 3.当整个控件的容器反转之后，为保证显示效果，要做一定的反转
          */
-        float x = 0l;
-        float y = 0l;
+        float x = 0L;
+        float y = 0L;
         if (isLeft()) {
             if (qua == 0) {
                 x = (float) Math.sin(Math.toRadians(newdegree)) * radius;
@@ -741,7 +761,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param index 索引
      * @return 返回(x, y)坐标
      */
-    public Coordinate coordinate2(ArrayList<DragView> views, int index) {
+    public Coordinate coordinate2(ArrayList<BubbleTextView> views, int index) {
         /**
          * size按照当前views的总数，以4为区分，分别计算出<4,=4,超出4的部分剪掉4即从1，2，3重新开始计数
          */
@@ -819,8 +839,8 @@ public class AngleView extends PositionStateViewGroup {
          * 2.子控件根据不同的呃限象旋转位置满足在第0限象的正常显示效果
          * 3.当整个控件的容器反转之后，为保证显示效果，要做一定的反转
          */
-        float x = 0l;
-        float y = 0l;
+        float x = 0L;
+        float y = 0L;
         if (isLeft()) {
             x = (float) Math.sin(Math.toRadians(newdegree)) * radius;
             y = (float) (mHeight - Math.cos(Math.toRadians(newdegree)) * radius);
@@ -852,7 +872,7 @@ public class AngleView extends PositionStateViewGroup {
             case MotionEvent.ACTION_DOWN:
                 mMotionX = event.getX();
                 mMotionY = event.getY();
-                ArrayList<DragView> views = getData();
+                ArrayList<BubbleTextView> views = getData();
                 /**
                  * isRemoveFinish移除动画一处之前不允许再拖动
                  */
@@ -921,7 +941,7 @@ public class AngleView extends PositionStateViewGroup {
 
                 if (isMoveDrag) {
                     isMoveDrag = false;
-                    ArrayList<DragView> views2 = getData();
+                    ArrayList<BubbleTextView> views2 = getData();
                     if (mTargetItem != null) {
                         if (mTargetItem instanceof AngleItemStartUp) {
                             if (((AngleItemStartUp) mTargetItem).getDelBtn().getVisibility() == View.VISIBLE) {
@@ -1008,7 +1028,7 @@ public class AngleView extends PositionStateViewGroup {
      * 准备拖动时临时生成一个位置数组
      */
     public void exchangePre() {
-        ArrayList<DragView> views = getData();
+        ArrayList<BubbleTextView> views = getData();
         if (views != null) {
             mExchangePre.clear();
             for (int index = 0; index < views.size(); index++) {
@@ -1053,14 +1073,14 @@ public class AngleView extends PositionStateViewGroup {
                              * 触发交换的时候更新index值
                              */
                             mDragTargetIndex = index;
-                            ArrayList<DragView> arrayList = new ArrayList<>();
+                            ArrayList<BubbleTextView> arrayList = new ArrayList<>();
                             arrayList.clear();
                             arrayList.addAll(getData());
                             /**
                              * 交换数据
                              */
 
-                            DragView temp = arrayList.get(index);
+                            BubbleTextView temp = arrayList.get(index);
                             arrayList.set(index, arrayList.get(mTargetItem.getIndex()));
                             arrayList.set(mTargetItem.getIndex(), temp);
 
@@ -1072,7 +1092,7 @@ public class AngleView extends PositionStateViewGroup {
                                 arrayList.get(i).setIndex(i);
                             }
 
-                            ArrayList<DragView> views = arrayList;
+                            ArrayList<BubbleTextView> views = arrayList;
                             Coordinate coordinateTest = null;
                             if (views != null) {
                                 //mExchangeNext.clear();
@@ -1111,7 +1131,7 @@ public class AngleView extends PositionStateViewGroup {
      * @return 返回(x, y)坐标
      */
     public Coordinate findEmpty() {
-        ArrayList<DragView> views = getData();
+        ArrayList<BubbleTextView> views = getData();
         if (views != null) {
             for (int index = 0; index < views.size(); index++) {
                 if (index == mDragTargetIndex) {
@@ -1153,7 +1173,7 @@ public class AngleView extends PositionStateViewGroup {
                     mDelPre.addAll(getData());
                     mDelPre.remove(mTargetItem);
 
-                    ArrayList<DragView> views = mDelPre;
+                    ArrayList<BubbleTextView> views = mDelPre;
                     if (views != null) {
                         mDelNext.clear();
                         for (int index = 0; index < views.size(); index++) {
@@ -1188,7 +1208,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param resource   移除控件之后计算产生的新的item坐标
      * @param targetView 原始坐标
      */
-    public void transAnimator(final ArrayList<Coordinate> resource, final ArrayList<DragView> targetView) {
+    public void transAnimator(final ArrayList<Coordinate> resource, final ArrayList<BubbleTextView> targetView) {
         ValueAnimator translation = ValueAnimator.ofFloat(0f, 1f);
         translation.setDuration(250);
         translation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1240,7 +1260,7 @@ public class AngleView extends PositionStateViewGroup {
         translation.start();
     }
 
-    public void exchange(final Coordinate recource, DragView targetview, final int index) {
+    public void exchange(final Coordinate recource, BubbleTextView targetview, final int index) {
 
     }
 
@@ -1253,7 +1273,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param targetView 目标坐标，也就是动画的终点坐标
      * @param index      当前view交换之后的目标位置的index索引，主要用来屏蔽动画，因为松手之后有动画，不需要这这里再加动画了
      */
-    public void exchangeAnimator(final Coordinate resource, final ArrayList<DragView> targetView, final int index) {
+    public void exchangeAnimator(final Coordinate resource, final ArrayList<BubbleTextView> targetView, final int index) {
         ValueAnimator translation = ValueAnimator.ofFloat(0f, 1f);
         translation.setDuration(250);
         translation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1358,7 +1378,8 @@ public class AngleView extends PositionStateViewGroup {
         /**
          * 转动的时候回传当前限象index
          */
-        mAngleListener.onAngleChanged(getViewsIndex((int) (getAngleValues() / DEGREES_90)), ((getAngleValues() % DEGREES_90) / DEGREES_90));
+        mAngleListener.onAngleChanged(getViewsIndex((int) (getAngleValues() / DEGREES_90)),
+                ((getAngleValues() % DEGREES_90) / DEGREES_90));
         invalidate();
     }
 
@@ -1535,6 +1556,7 @@ public class AngleView extends PositionStateViewGroup {
      * @param end   结束为止
      */
     private void autoWhirling(float start, float end) {
+        Log.i(TAG,"autoWhirling，start："+start+",end:"+end);
         mChangeAngle = 0;
         mAngleAnimator = ValueAnimator.ofFloat(start, end);
         mAngleAnimator.setDuration(500);
@@ -1545,7 +1567,7 @@ public class AngleView extends PositionStateViewGroup {
                 float value = (float) animation.getAnimatedValue();
                 mBaseAngle = value;
                 mBaseAngle = mBaseAngle % DEGREES_1080;
-                angleChange();
+                angleChange();//回调指示器和指示器主题
             }
         });
         mAngleAnimator.addListener(new Animator.AnimatorListener() {
@@ -1561,13 +1583,10 @@ public class AngleView extends PositionStateViewGroup {
                     /**
                      * getQuaIndex()
                      */
-                    itemLayout(mIndex);
-
+                    allItemsLayoutOnLeft(mIndex);
                 } else if (isRight()) {
-                    itemLayout2(mIndex);
-
+                    allItemLayoutOnRight(mIndex);
                 }
-
             }
 
             @Override
@@ -1594,8 +1613,8 @@ public class AngleView extends PositionStateViewGroup {
      * @return
      */
     public float getAngleValues() {
-        float newrotation = (mBaseAngle + mChangeAngle);
-        return newrotation < 0 ? DEGREES_1080 + (newrotation) : (newrotation);
+        float newRotation = (mBaseAngle + mChangeAngle);
+        return newRotation < 0 ? DEGREES_1080 + (newRotation) : (newRotation);
     }
 
     public float getBaseAngle() {
@@ -1703,15 +1722,14 @@ public class AngleView extends PositionStateViewGroup {
      *
      * @return 当前显示在第0限象位置的数据
      */
-    public ArrayList<DragView> getData() {
+    public ArrayList<BubbleTextView> getData() {
         return mMap.get(getViewsIndex());
     }
 
-    public void putData(ArrayList<DragView> arrayList) {
+    public void putData(ArrayList<BubbleTextView> arrayList) {
         mMap.put(getViewsIndex(), arrayList);
         refresh();
     }
-
 
     /**
      * mPositionState=Right
@@ -1750,7 +1768,7 @@ public class AngleView extends PositionStateViewGroup {
         int index = getViewsIndex();
 
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            DragView item = mMap.get(index).get(i);
+            BubbleTextView item = mMap.get(index).get(i);
             if (item instanceof AngleItemStartUp) {
                 ((AngleItemStartUp) item).showDelBtn();
             }
@@ -1764,7 +1782,7 @@ public class AngleView extends PositionStateViewGroup {
         isMoveDrag = true;
         int index = getViewsIndex();
         for (int i = 0; i < mMap.get(index).size(); i++) {
-            DragView item = mMap.get(index).get(i);
+            BubbleTextView item = mMap.get(index).get(i);
             if (item instanceof AngleItemStartUp) {
                 ((AngleItemStartUp) item).hideDelBtn();
             }
@@ -1780,7 +1798,7 @@ public class AngleView extends PositionStateViewGroup {
         return mChildHalfSize;
     }
 
-    public DragView getTargetItem() {
+    public BubbleTextView getTargetItem() {
         return mTargetItem;
     }
 

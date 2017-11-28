@@ -14,7 +14,7 @@ import android.util.AttributeSet;
  *
  *
  */
-public class AngleItemAddTo extends DragView {
+public class AngleItemAddTo extends BubbleTextView {
 
     public AngleItemAddTo(Context context) {
         super(context);

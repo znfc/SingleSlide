@@ -21,7 +21,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class DragView extends RelativeLayout {
+public class BubbleTextView extends RelativeLayout {
 
     private ImageView mIcon;
 
@@ -40,15 +40,15 @@ public class DragView extends RelativeLayout {
     private double mParentY;
 
 
-    public DragView(Context context) {
+    public BubbleTextView(Context context) {
         this(context, null);
     }
 
-    public DragView(Context context, AttributeSet attrs) {
+    public BubbleTextView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DragView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BubbleTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

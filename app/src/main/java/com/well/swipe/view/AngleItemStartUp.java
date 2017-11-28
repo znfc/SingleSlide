@@ -20,7 +20,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class AngleItemStartUp extends DragView {
+public class AngleItemStartUp extends BubbleTextView {
 
     private ImageView mDelIcon;
 

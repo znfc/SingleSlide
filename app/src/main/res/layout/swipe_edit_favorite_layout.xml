@@ -10,6 +10,7 @@
         android:layout_width="@dimen/swipe_edit_layout_width"
         android:layout_height="@dimen/swipe_edit_header_height"
         android:background="@drawable/swipe_edit_header_normal">
+        <!--这个view是弹出选择应用的标题一栏-->
 
         <TextView
             android:id="@+id/swipe_edit_header_title"
@@ -19,8 +20,6 @@
             android:paddingLeft="@dimen/swipe_edit_header_title_padding_left"
             android:textColor="@color/swipe_header_title_color"
             android:textSize="@dimen/swipe_edit_header_title_size" />
-
-
     </RelativeLayout>
 
     <LinearLayout
@@ -31,7 +30,7 @@
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
-
+        <!--这个是弹出框的内容区域 里边有很多可以供选择的应用icon-->
     </LinearLayout>
 
     <LinearLayout

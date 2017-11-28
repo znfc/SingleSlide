@@ -409,7 +409,7 @@ public class SwipeService extends Service implements CatchView.OnEdgeSlidingList
 
     @Override
     public void bindAllApps(ArrayList<ItemApplication> appslist) {
-        //mSwipeLayout.getSwipeEditLayout().setData(appslist);
+//        mSwipeLayout.getSwipeEditLayout().setData(appslist);
     }
 
     @Override

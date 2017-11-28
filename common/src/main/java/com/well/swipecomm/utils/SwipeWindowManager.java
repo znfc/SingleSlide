@@ -2,6 +2,7 @@ package com.well.swipecomm.utils;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,21 +16,24 @@ import android.view.WindowManager;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
+ * zhaopenglin
+ * 这个类就是一个辅助类，是将view从WindowManager添加或删除的逻辑独立出来的一个类
  */
 public class SwipeWindowManager {
 
-    private WindowManager mManager;
+    private static final String TAG = "SwipeWindowManager";
+
+    private WindowManager mWindowManager;
 
     private WindowManager.LayoutParams mParams;
 
     public SwipeWindowManager(int x, int y, Context context) {
+        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
         mParams = new WindowManager.LayoutParams();
-        mManager = (WindowManager) context.getSystemService(context.WINDOW_SERVICE);
         mParams.type = WindowManager.LayoutParams.TYPE_PHONE;//这里如果不换成TYPE_PHONE的话那个滑动窗口滑动出来会慢慢消失
 //        mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         mParams.format = PixelFormat.RGBA_8888;
-        //mParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_FULLSCREEN;
         mParams.gravity = Gravity.LEFT | Gravity.TOP;
@@ -39,35 +43,33 @@ public class SwipeWindowManager {
         mParams.height = WindowManager.LayoutParams.MATCH_PARENT;
     }
 
-    public boolean isManager() {
-        return mManager != null;
+    private boolean isHasWindowManager() {
+        return mWindowManager != null;
     }
 
     public void show(View view) {
-        if (isManager()) {
-            if (view.getParent() == null) {
-                mManager.addView(view, mParams);
+        Log.i(TAG,"show");
+        if (isHasWindowManager()) {
+            if (view.getParent() == null) { //这个判断是保证该view只会被添加一次
+                Log.i(TAG,"show view.getParent() != null and add the view");
+                mWindowManager.addView(view, mParams);
             }
         }
     }
 
     public boolean hasView(View view) {
-        if (isManager()) {
+        if (isHasWindowManager()) {
             return view.getParent() != null;
         }
         return false;
     }
 
-    public void hide(View view) {
-        if (isManager()) {
+    public void dismiss(View view) {
+        if (isHasWindowManager()) {
             if (view.getParent() != null) {
-                mManager.removeView(view);
+                mWindowManager.removeView(view);
             }
         }
     }
 
-    public void setParams(int x, int y) {
-        mParams.x = x;
-        mParams.y = y;
-    }
 }

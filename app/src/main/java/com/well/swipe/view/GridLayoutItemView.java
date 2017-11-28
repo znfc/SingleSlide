@@ -17,7 +17,7 @@ import com.well.swipe.R;
  *
  *
  */
-public class GridLayoutItemView extends DragView {
+public class GridLayoutItemView extends BubbleTextView {
 
     private CheckBox mCheckBox;
 

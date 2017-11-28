@@ -24,7 +24,8 @@ import java.util.ArrayList;
  * CSDN:     http://blog.csdn.net/u013045971
  * QQ&WX：   721881283
  *
- *
+ * zhaopenglin
+ * 这个是快捷应用的选择弹出框选择器和它相似的有一个常用应用弹出框选择器
  */
 public class SwipeEditToolsEditDialog extends SwipeEditDialog implements View.OnClickListener {
     /**

@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,9 @@ import com.well.swipecomm.utils.SwipeWindowManager;
  */
 public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffListener {
 
-    private SwipeWindowManager mManager;
+    private static final String TAG = "SwipeLayout";
+
+    private SwipeWindowManager mSwipeWindowManager;
 
     private AngleLayout mAngleLayout;
 
@@ -51,7 +54,12 @@ public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffList
     public SwipeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        addEditDialogView(context);
+    }
+
+    private void addEditDialogView(Context context) {
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
         mFavoriteLayout = (SwipeEditFavoriteEditDialog) LayoutInflater.from(context)
                 .inflate(R.layout.swipe_edit_favorite_layout, null);
         addView(mFavoriteLayout, params);
@@ -67,13 +75,8 @@ public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffList
         mAngleLayout = (AngleLayout) findViewById(R.id.anglelayout);
         mAngleLayout.setOnOffListener(this);
         mBgLayout = (LinearLayout) findViewById(R.id.swipe_bg_layout);
-        mManager = new SwipeWindowManager(0, 0, getContext());
+        mSwipeWindowManager = new SwipeWindowManager(0, 0, getContext());
 
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     /**
@@ -96,8 +99,11 @@ public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffList
         }
     }
 
+    /**
+     * 判断 SwipeLayout这个view是否已经添加到WindowManager上去
+     */
     public boolean hasView() {
-        return mManager.hasView(this);
+        return mSwipeWindowManager.hasView(this);
     }
 
     /**
@@ -110,11 +116,14 @@ public class SwipeLayout extends RelativeLayout implements AngleLayout.OnOffList
     }
 
     public void show() {
-        mManager.show(this);
+        Log.i(TAG,"show");
+//        new Exception("my show").printStackTrace();
+        mSwipeWindowManager.show(this);
     }
 
     public void dismiss() {
-        mManager.hide(this);
+        Log.i(TAG,"dismiss");
+        mSwipeWindowManager.dismiss(this);
     }
 
     public void dismissAnimator() {

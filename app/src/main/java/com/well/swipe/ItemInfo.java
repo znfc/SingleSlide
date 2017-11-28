@@ -20,6 +20,8 @@ import java.io.IOException;
  */
 public class ItemInfo {
 
+    public static String TAG = "ItemInfo";
+
     /**
      * item类型
      */
@@ -34,10 +36,7 @@ public class ItemInfo {
      */
     int mIndex;
 
-
-    ItemInfo() {
-
-    }
+    ItemInfo() {}
 
     ItemInfo(ItemInfo info) {
         mType = info.mType;
@@ -45,7 +44,7 @@ public class ItemInfo {
         mIndex = info.mIndex;
     }
 
-    static String getPackageName(Intent intent) {
+    public String getPackageName(Intent intent) {
         if (intent != null) {
             String packageName = intent.getPackage();
             if (packageName == null && intent.getComponent() != null) {

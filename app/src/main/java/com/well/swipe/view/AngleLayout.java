@@ -33,8 +33,8 @@ import com.well.swipecomm.view.PositionState;
  *
  */
 public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeListener,
-        AngleIndicatorView.OnIndexChangedListener, AngleView.OnEditModeChangeListener, CornerView.OnCornerClickListener,
-        AngleView.OnBindListener {
+        AngleIndicatorView.OnIndexChangedListener, AngleView.OnEditModeChangeListener,
+        CornerView.OnCornerClickListener, AngleView.OnBindListener {
     
     private Context mContext;
     /**
@@ -46,7 +46,7 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
      */
     private AngleViewTheme mAngleViewTheme;
     /**
-     *
+     * 这个变量好像并不是控制这个angleView的直径大小，我修改了值发现圆心移动了位置
      */
     private int mAngleSize;
     /**
@@ -143,6 +143,7 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
     /**
      * 切换状态，开和关
      */
+    //TODO 暂时不知道这个状态开关是干什么用的
     public static final int SWITCH_TYPE_ON = 0;
     public static final int SWITCH_TYPE_OFF = 1;
     private int mSwitchType = SWITCH_TYPE_OFF;
@@ -191,7 +192,6 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
     public OnItemDragListener mItemDragListener;
 
     public interface OnItemDragListener {
-
         /**
          * 拖拽结束时调用
          *
@@ -614,10 +614,10 @@ public class AngleLayout extends FrameLayout implements AngleView.OnAngleChangeL
     /**
      * 拖拽前赋的值，在松开手之后用来结束时隐藏拖拽View的替身
      */
-    DragView mTargetView;
+    BubbleTextView mTargetView;
 
     @Override
-    public void onStartDrag(DragView view, float newleft, float newtop, float offsetLeft, float offsetTop) {
+    public void onStartDrag(BubbleTextView view, float newleft, float newtop, float offsetLeft, float offsetTop) {
 
         mTargetView = view;
         if (isRestoreFinish) {
